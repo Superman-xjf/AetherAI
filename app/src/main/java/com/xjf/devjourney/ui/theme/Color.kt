@@ -1,4 +1,4 @@
-package com.xjf.aetherai.ui.theme
+package com.xjf.devjourney.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

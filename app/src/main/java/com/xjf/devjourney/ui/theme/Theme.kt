@@ -1,4 +1,4 @@
-package com.xjf.aetherai.ui.theme
+package com.xjf.devjourney.ui.theme
 
 import android.app.Activity
 import android.os.Build
@@ -34,7 +34,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun AetherAITheme(
+fun DevJourneyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

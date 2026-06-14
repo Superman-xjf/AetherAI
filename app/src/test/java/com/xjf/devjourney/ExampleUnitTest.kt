@@ -1,4 +1,4 @@
-package com.xjf.aetherai
+package com.xjf.devjourney
 
 import org.junit.Test
 

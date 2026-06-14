@@ -22,6 +22,9 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AetherAI"
+rootProject.name = "DevJourney"
 include(":app")
+include(":core:model")
+include(":core:data")
+include(":feature:dashboard")
  
