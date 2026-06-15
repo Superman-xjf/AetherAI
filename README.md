@@ -287,6 +287,10 @@ core
 8. 新增 `core:network` 并接入资源搜索。
 9. 加入 WorkManager、提醒和 AI 能力。
 
+## 阶段文档
+
+- [Phase 1: Dashboard 首页完善](docs/phase-1-dashboard.md)
+
 ## 本地构建
 
 当前项目使用本机 JDK 17 构建：
