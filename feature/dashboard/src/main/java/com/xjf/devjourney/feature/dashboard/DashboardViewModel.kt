@@ -3,6 +3,7 @@ package com.xjf.devjourney.feature.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xjf.devjourney.core.data.DevJourneyRepository
+import com.xjf.devjourney.core.model.DashboardSummary
 import com.xjf.devjourney.core.model.LearningTask
 import com.xjf.devjourney.core.model.LearningTopic
 import com.xjf.devjourney.core.model.StudyNote
@@ -23,7 +24,23 @@ class DashboardViewModel @Inject constructor(
         repository.tasks,
         repository.notes,
     ) { topics, tasks, notes ->
+        val topicCount = topics.size
+        val totalTaskCount = tasks.size
+        val currentTaskCount = tasks.filterNot { tasks -> tasks.status == TaskStatus.Done }.size
+        val completedTaskCount = tasks.filter { tasks -> tasks.status == TaskStatus.Done }.size
+        val progress = if (tasks.isEmpty()) {
+            0f
+        } else {
+            completedTaskCount.toFloat() / tasks.size
+        }
         DashboardUiState.Ready(
+            summary = DashboardSummary(
+                topicCount,
+                totalTaskCount,
+                completedTaskCount,
+                currentTaskCount,
+                progress
+            ),
             topics = topics,
             activeTasks = tasks.filterNot { it.status == TaskStatus.Done },
             recentNotes = notes,
@@ -39,6 +56,7 @@ sealed interface DashboardUiState {
     data object Loading : DashboardUiState
 
     data class Ready(
+        val summary: DashboardSummary,
         val topics: List<LearningTopic>,
         val activeTasks: List<LearningTask>,
         val recentNotes: List<StudyNote>,
