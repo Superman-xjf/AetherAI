@@ -2,7 +2,7 @@
 
 DevJourney 是一个用于练习现代 Android 技术栈的个人学习工作台。项目目标不是一次性做完一个复杂 App，而是围绕一个真实的小产品，循序渐进地学习 Compose、多模块架构、Hilt、Room、网络、后台任务、测试和后续 AI 能力。
 
-当前版本已经搭好可运行的多模块骨架，并接入 Hilt 作为依赖注入方案。现阶段数据仍来自内存中的 `FakeDevJourneyRepository`，适合先练习 UI、状态管理和模块边界。
+当前版本已经搭好可运行的多模块骨架，并接入 Hilt 作为依赖注入方案。Phase 1 已完成 Dashboard 首页完善，现阶段数据仍来自内存中的 `FakeDevJourneyRepository`。Phase 2 的重点是新增 `feature:tasks`，把项目从“只读概览”推进到“可操作的任务管理”。
 
 ## 项目定位
 
@@ -108,6 +108,8 @@ DashboardScreen
 
 ### 阶段 1：完善 Dashboard 首页
 
+状态：已完成。
+
 目标：把当前首页变成一个真正可用的学习概览页。
 
 - 优化首页布局和中文文案。
@@ -126,15 +128,18 @@ DashboardScreen
 
 ### 阶段 2：新增任务模块 `feature:tasks`
 
-目标：完成第一个完整业务功能。
+状态：下一阶段。
+
+目标：完成第一个完整业务功能，让用户可以查看、创建、编辑、删除任务，并切换任务状态。
 
 - 新增 `feature:tasks` 模块。
 - 实现任务列表页。
-- 实现新增任务。
-- 实现编辑任务。
-- 实现删除任务。
-- 实现任务状态切换。
-- 扩展 `DevJourneyRepository` 的任务操作 API。
+- 实现新增任务表单。
+- 实现编辑任务表单。
+- 实现删除任务确认。
+- 实现任务状态切换，例如 `Todo -> Doing -> Done`。
+- 扩展 `DevJourneyRepository` 的任务操作 API，让 Dashboard 和 Tasks 共享同一份任务数据。
+- 在 `FakeDevJourneyRepository` 中先用内存可变数据模拟真实写入，为后续 Room 铺路。
 
 学习重点：
 
@@ -143,6 +148,8 @@ DashboardScreen
 - ViewModel 事件处理
 - 单向数据流
 - Repository 接口设计
+- 跨页面共享状态
+- 轻量级错误处理与输入校验
 
 ### 阶段 3：接入 Room 本地数据库
 
@@ -277,9 +284,9 @@ core
 
 建议按下面顺序推进：
 
-1. 整理 README 和中文文案。
-2. 完善 Dashboard 首页。
-3. 新增 `feature:tasks`。
+1. 整理 README 和中文文案。已完成。
+2. 完善 Dashboard 首页。已完成。
+3. 新增 `feature:tasks`。下一步。
 4. 接入 Room。
 5. 新增 `feature:notes`。
 6. 加入 Navigation Compose。
@@ -290,6 +297,7 @@ core
 ## 阶段文档
 
 - [Phase 1: Dashboard 首页完善](docs/phase-1-dashboard.md)
+- [Phase 2: Tasks 任务模块](docs/phase-2-tasks.md)
 
 ## 本地构建
 
