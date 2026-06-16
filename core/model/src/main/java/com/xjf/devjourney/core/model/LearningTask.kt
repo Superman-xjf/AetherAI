@@ -7,8 +7,8 @@ data class LearningTask(
     val status: TaskStatus,
 )
 
-enum class TaskStatus {
-    Todo,
-    Doing,
-    Done,
+enum class TaskStatus(val label: String) {
+    Todo("待开始"),
+    Doing("进行中"),
+    Done("已完成"),
 }
