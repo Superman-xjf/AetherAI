@@ -11,6 +11,16 @@ import javax.inject.Singleton
 
 @Singleton
 class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
+
+    private val _tasks = MutableStateFlow(
+        listOf(
+            LearningTask("task-1", "搭建多模块项目结构", "Architecture", TaskStatus.Done),
+            LearningTask("task-2", "实现第一个 Compose Dashboard", "Compose", TaskStatus.Doing),
+            LearningTask("task-3", "用 Room 替换内存数据源", "Data", TaskStatus.Todo),
+            LearningTask("task-4", "接入 GitHub Repository 搜索 API", "Network", TaskStatus.Todo),
+        ),
+    )
+
     override val topics: Flow<List<LearningTopic>> = MutableStateFlow(
         listOf(
             LearningTopic(
@@ -40,14 +50,7 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
         ),
     )
 
-    override val tasks: Flow<List<LearningTask>> = MutableStateFlow(
-        listOf(
-            LearningTask("task-1", "搭建多模块项目结构", "Architecture", TaskStatus.Done),
-            LearningTask("task-2", "实现第一个 Compose Dashboard", "Compose", TaskStatus.Doing),
-            LearningTask("task-3", "用 Room 替换内存数据源", "Data", TaskStatus.Todo),
-            LearningTask("task-4", "接入 GitHub Repository 搜索 API", "Network", TaskStatus.Todo),
-        ),
-    )
+    override val tasks: Flow<List<LearningTask>> = _tasks
 
     override val notes: Flow<List<StudyNote>> = MutableStateFlow(
         listOf(
@@ -65,4 +68,27 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
             ),
         ),
     )
+
+    override suspend fun addTask(
+        title: String,
+        topic: String,
+        status: TaskStatus
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateTask(task: LearningTask) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteTask(taskId: String) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateTaskStatus(
+        taskId: String,
+        status: TaskStatus
+    ) {
+        TODO("Not yet implemented")
+    }
 }
