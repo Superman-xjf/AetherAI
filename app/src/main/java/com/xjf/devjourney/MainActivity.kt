@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.xjf.devjourney.feature.dashboard.DashboardRoute
 import com.xjf.devjourney.ui.theme.DevJourneyTheme
+import com.xjf.tasks.TasksRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             DevJourneyTheme {
-                DashboardRoute()
+                TasksRoute()
             }
         }
     }

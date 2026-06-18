@@ -2,12 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
 }
 
+
 android {
-    namespace = "com.xjf.devjourney.feature.tasks"
+    namespace = "com.xjf.devjourney.core.ui"
     compileSdk = 36
 
     defaultConfig {
@@ -28,17 +27,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:data"))
-    implementation(project(":core:model"))
-    implementation(project(":core:ui"))
-
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
+
     implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 }

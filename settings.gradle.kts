@@ -29,3 +29,4 @@ include(":core:data")
 include(":feature:dashboard")
 
 include(":feature:tasks")
+include(":core:ui")

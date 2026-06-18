@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation(project(":feature:dashboard"))
+    implementation(project(":feature:tasks"))
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)

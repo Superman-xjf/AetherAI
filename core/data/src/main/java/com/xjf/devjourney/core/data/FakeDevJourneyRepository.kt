@@ -6,6 +6,7 @@ import com.xjf.devjourney.core.model.StudyNote
 import com.xjf.devjourney.core.model.TaskStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -77,8 +78,14 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateTask(task: LearningTask) {
-        TODO("Not yet implemented")
+    override suspend fun updateTask(learningTask: LearningTask) {
+        _tasks.value = _tasks.value.map { task ->
+            if (learningTask.id == task.id) {
+                learningTask
+            } else {
+                task
+            }
+        }
     }
 
     override suspend fun deleteTask(taskId: String) {
@@ -89,6 +96,12 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
         taskId: String,
         status: TaskStatus
     ) {
-        TODO("Not yet implemented")
+        _tasks.value = _tasks.value.map { task ->
+            if (task.id == taskId) {
+                task.copy(status = status)
+            } else {
+                task
+            }
+        }
     }
 }
