@@ -27,4 +27,6 @@ include(":app")
 include(":core:model")
 include(":core:data")
 include(":feature:dashboard")
- 
+
+include(":feature:tasks")
+include(":core:ui")

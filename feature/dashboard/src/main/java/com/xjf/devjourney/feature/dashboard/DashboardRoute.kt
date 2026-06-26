@@ -28,12 +28,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.xjf.devjourney.core.model.DashboardSummary
 import com.xjf.devjourney.core.model.LearningTask
 import com.xjf.devjourney.core.model.LearningTopic
 import com.xjf.devjourney.core.model.StudyNote
 import com.xjf.devjourney.core.model.TaskStatus
+import com.xjf.devjourney.core.ui.EmptySectionMessage
+import com.xjf.devjourney.core.ui.LoadingContent
+import com.xjf.devjourney.core.ui.SectionTitle
 
 @Composable
 fun DashboardRoute(
@@ -78,18 +81,6 @@ fun DashboardScreen(
     }
 }
 
-@Composable
-private fun LoadingContent(contentPadding: PaddingValues) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(contentPadding),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        CircularProgressIndicator()
-    }
-}
 
 @Composable
 private fun DashboardContent(
@@ -156,31 +147,6 @@ private fun DashboardContent(
     }
 }
 
-@Composable
-private fun EmptySectionMessage(message: String) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
-    ) {
-        Text(
-            text = message,
-            modifier = Modifier.padding(16.dp),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
-        modifier = Modifier.padding(top = 8.dp),
-    )
-}
 
 @Composable
 private fun SummaryCard(summary: DashboardSummary) {

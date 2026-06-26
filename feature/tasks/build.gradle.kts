@@ -7,13 +7,15 @@ plugins {
 }
 
 android {
-    namespace = "com.xjf.devjourney.feature.dashboard"
+    namespace = "com.xjf.devjourney.feature.tasks"
     compileSdk = 36
 
     defaultConfig {
         minSdk = 26
-    }
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -22,6 +24,7 @@ android {
     buildFeatures {
         compose = true
     }
+
 }
 
 dependencies {
@@ -39,4 +42,3 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 }
-
