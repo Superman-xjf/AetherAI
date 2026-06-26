@@ -136,6 +136,28 @@ fun TasksContent(
         )
     }
 
+    if (state.deletingTask != null) {
+        AlertDialog(
+            onDismissRequest = onDeleteDismiss,
+            title = {
+                Text("删除任务")
+            },
+            text = {
+                Text("确定要删除任务:${state.deletingTask.title}吗？")
+            },
+            confirmButton = {
+                TextButton(onClick = onDeleteConfirm) {
+                    Text("删除")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = onDeleteDismiss) {
+                    Text("取消")
+                }
+            },
+        )
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(
@@ -177,13 +199,17 @@ fun TasksList(
     if (tasks.isEmpty()) {
         EmptySectionMessage("还没有学习任务")
     } else {
-        tasks.forEach { task ->
-            TaskRow(
-                task = task,
-                onEditClick = onEditTaskClick,
-                onDeleteClick = onDeleteTaskClick,
-                onToggleStatusClick = onToggleTaskStatus,
-            )
+        Column(
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            tasks.forEach { task ->
+                TaskRow(
+                    task = task,
+                    onEditClick = onEditTaskClick,
+                    onDeleteClick = onDeleteTaskClick,
+                    onToggleStatusClick = onToggleTaskStatus,
+                )
+            }
         }
     }
 }

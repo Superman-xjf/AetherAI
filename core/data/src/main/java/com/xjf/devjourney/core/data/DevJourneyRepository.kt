@@ -13,7 +13,7 @@ interface DevJourneyRepository {
 
     suspend fun addTask(title: String, topic: String, status: TaskStatus = TaskStatus.Todo)
 
-    suspend fun updateTask(task: LearningTask)
+    suspend fun updateTask(learningTask: LearningTask)
 
     suspend fun deleteTask(taskId: String)
 

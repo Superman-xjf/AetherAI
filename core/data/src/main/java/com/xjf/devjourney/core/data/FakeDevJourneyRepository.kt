@@ -89,7 +89,9 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
     }
 
     override suspend fun deleteTask(taskId: String) {
-        TODO("Not yet implemented")
+        _tasks.value = _tasks.value.filterNot { task ->
+            taskId == task.id
+        }
     }
 
     override suspend fun updateTaskStatus(

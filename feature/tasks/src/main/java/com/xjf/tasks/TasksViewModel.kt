@@ -22,13 +22,15 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
 
     private val formState = MutableStateFlow(TaskFormState())
     private val editingTaskId = MutableStateFlow<String?>(null)
+    private val deletingTask = MutableStateFlow<LearningTask?>(null)
     private val isFormVisible = MutableStateFlow(false)
     val uiState: StateFlow<TasksUiState> = combine(
         repository.tasks,
         formState,
         editingTaskId,
         isFormVisible,
-    ) { tasks, form, editingId, formVisible ->
+        deletingTask,
+    ) { tasks, form, editingId, formVisible, deletingTask ->
         TasksUiState.Ready(
             summary = TasksSummary(
                 totalCount = tasks.size,
@@ -40,6 +42,7 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
             form = form,
             editingTaskId = editingId,
             isFormVisible = formVisible,
+            deletingTask = deletingTask,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -104,15 +107,19 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
     }
 
     fun onDeleteTaskClick(learningTask: LearningTask) {
-
+        deletingTask.value = learningTask
     }
 
     fun onDeleteConfirm() {
-
+        val deletingTaskId = deletingTask.value?.id ?: return
+        viewModelScope.launch {
+            repository.deleteTask(deletingTaskId)
+            deletingTask.value = null
+        }
     }
 
     fun onDeleteDismiss() {
-
+        deletingTask.value = null
     }
 
     fun onToggleTaskStatus(learningTask: LearningTask) {
