@@ -6,7 +6,6 @@ import com.xjf.devjourney.core.model.StudyNote
 import com.xjf.devjourney.core.model.TaskStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -75,7 +74,14 @@ class FakeDevJourneyRepository @Inject constructor() : DevJourneyRepository {
         topic: String,
         status: TaskStatus
     ) {
-        TODO("Not yet implemented")
+        val task = LearningTask(
+            id = "task-${System.currentTimeMillis()}",
+            title = title,
+            topic = topic,
+            status = status,
+        )
+
+        _tasks.value += task
     }
 
     override suspend fun updateTask(learningTask: LearningTask) {

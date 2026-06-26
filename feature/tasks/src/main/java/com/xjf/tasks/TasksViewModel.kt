@@ -51,7 +51,10 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
     )
 
     fun onAddTaskClick() {
+        editingTaskId.value = null
+        formState.value = TaskFormState()
 
+        isFormVisible.value = true
     }
 
     fun onTitleChange(title: String) {
@@ -68,22 +71,39 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
         )
     }
 
-    fun onStatusChange() {
-
+    fun onStatusChange(status: TaskStatus) {
+        formState.value = formState.value.copy(
+            status = status
+        )
     }
 
     fun onSaveTask() {
-        val editingTaskId = editingTaskId.value ?: return
         val form = formState.value
+
+        if (form.title.isBlank()) {
+            formState.value = form.copy(titleError = "请输入任务标题")
+            return
+        }
+
         viewModelScope.launch {
-            repository.updateTask(
-                LearningTask(
-                    editingTaskId,
-                    form.title,
-                    form.topic,
-                    TaskStatus.Todo
+            val taskId = editingTaskId.value
+
+            if (taskId == null) {
+                repository.addTask(
+                    title = form.title.trim(),
+                    topic = form.topic.trim(),
+                    status = form.status,
                 )
-            )
+            } else {
+                repository.updateTask(
+                    LearningTask(
+                        id = taskId,
+                        title = form.title.trim(),
+                        topic = form.topic.trim(),
+                        status = form.status,
+                    )
+                )
+            }
             onCancelForm()
         }
 
@@ -101,6 +121,7 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
         formState.value = TaskFormState(
             title = learningTask.title,
             topic = learningTask.topic,
+            status = learningTask.status,
         )
 
         isFormVisible.value = true
@@ -111,9 +132,9 @@ class TasksViewModel @Inject constructor(private val repository: DevJourneyRepos
     }
 
     fun onDeleteConfirm() {
-        val deletingTaskId = deletingTask.value?.id ?: return
+        val task = deletingTask.value ?: return
         viewModelScope.launch {
-            repository.deleteTask(deletingTaskId)
+            repository.deleteTask(task.id)
             deletingTask.value = null
         }
     }

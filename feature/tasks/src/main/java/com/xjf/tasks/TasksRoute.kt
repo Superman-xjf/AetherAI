@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -27,7 +29,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.xjf.devjourney.core.model.LearningTask
+import com.xjf.devjourney.core.model.TaskStatus
 import com.xjf.devjourney.core.model.task.TaskFormState
+import com.xjf.devjourney.core.model.task.TasksSummary
 import com.xjf.devjourney.core.ui.EmptySectionMessage
 import com.xjf.devjourney.core.ui.LoadingContent
 
@@ -62,7 +66,7 @@ fun TasksScreen(
     onAddTaskClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onTopicChange: (String) -> Unit,
-    onStatusChange: () -> Unit,
+    onStatusChange: (TaskStatus) -> Unit,
     onSaveTask: () -> Unit,
     onCancelForm: () -> Unit,
     onEditTaskClick: (LearningTask) -> Unit,
@@ -115,7 +119,7 @@ fun TasksContent(
     onAddTaskClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onTopicChange: (String) -> Unit,
-    onStatusChange: () -> Unit,
+    onStatusChange: (TaskStatus) -> Unit,
     onSaveTask: () -> Unit,
     onCancelForm: () -> Unit,
     onEditTaskClick: (LearningTask) -> Unit,
@@ -133,6 +137,7 @@ fun TasksContent(
             onTopicChange = onTopicChange,
             onSaveClick = onSaveTask,
             onDismiss = onCancelForm,
+            onStatusChange = onStatusChange,
         )
     }
 
@@ -168,6 +173,19 @@ fun TasksContent(
         ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        item {
+            TasksSummarySection(state.summary)
+        }
+
+        item {
+            Button(
+                onClick = onAddTaskClick,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("新增任务")
+            }
+        }
+
         item {
             Text(
                 text = "任务列表",
@@ -278,6 +296,7 @@ fun TaskForm(
     onTopicChange: (String) -> Unit,
     onSaveClick: () -> Unit,
     onDismiss: () -> Unit,
+    onStatusChange: (TaskStatus) -> Unit,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -306,7 +325,10 @@ fun TaskForm(
                     singleLine = true,
                 )
 
-                // TODO: 状态选择器
+                TaskStatusSelector(
+                    selectedStatus = form.status,
+                    onStatusSelected = onStatusChange,
+                )
             }
         },
         confirmButton = {
@@ -320,4 +342,105 @@ fun TaskForm(
             }
         },
     )
+}
+
+@Composable
+fun TaskStatusSelector(
+    selectedStatus: TaskStatus,
+    onStatusSelected: (TaskStatus) -> Unit,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        TaskStatus.entries.forEach { status ->
+            FilterChip(
+                selected = selectedStatus == status,
+                onClick = { onStatusSelected(status) },
+                label = { Text(status.label) },
+            )
+        }
+    }
+}
+
+@Composable
+fun TasksSummarySection(summary: TasksSummary) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "任务概览",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                TaskSummaryItem(
+                    label = "全部任务",
+                    count = summary.totalCount,
+                    modifier = Modifier.weight(1f)
+                )
+
+                TaskSummaryItem(
+                    label = "待开始",
+                    count = summary.todoCount,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                TaskSummaryItem(
+                    label = "进行中",
+                    count = summary.doingCount,
+                    modifier = Modifier.weight(1f),
+                )
+                TaskSummaryItem(
+                    label = "已完成",
+                    count = summary.doneCount,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        }
+
+    }
+}
+
+@Composable
+fun TaskSummaryItem(
+    label: String,
+    count: Int,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.medium,
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
+    ) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            Text(
+                text = count.toString(),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+    }
 }
