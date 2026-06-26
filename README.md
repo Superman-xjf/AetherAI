@@ -2,7 +2,7 @@
 
 DevJourney 是一个用于练习现代 Android 技术栈的个人学习工作台。项目目标不是一次性做完一个复杂 App，而是围绕一个真实的小产品，循序渐进地学习 Compose、多模块架构、Hilt、Room、网络、后台任务、测试和后续 AI 能力。
 
-当前版本已经搭好可运行的多模块骨架，并接入 Hilt 作为依赖注入方案。Phase 1 已完成 Dashboard 首页完善，现阶段数据仍来自内存中的 `FakeDevJourneyRepository`。Phase 2 的重点是新增 `feature:tasks`，把项目从“只读概览”推进到“可操作的任务管理”。
+当前版本已经搭好可运行的多模块骨架，并接入 Hilt 作为依赖注入方案。Phase 1 已完成 Dashboard 首页完善，Phase 2 已完成任务模块。现阶段数据仍来自内存中的 `FakeDevJourneyRepository`。Phase 3 的重点是接入 Room，把任务数据从“内存模拟写入”推进到“本地持久化存储”。
 
 ## 项目定位
 
@@ -20,9 +20,11 @@ DevJourney
 ├── app
 ├── core
 │   ├── data
-│   └── model
+│   ├── model
+│   └── ui
 └── feature
-    └── dashboard
+    ├── dashboard
+    └── tasks
 ```
 
 | 模块 | 职责 |
@@ -30,7 +32,9 @@ DevJourney
 | `app` | 应用入口、主题包装、启动首屏、`Application`、Hilt 初始化 |
 | `core:model` | 领域模型，例如 `LearningTopic`、`LearningTask`、`StudyNote` |
 | `core:data` | Repository 抽象、当前内存数据源、Hilt 数据绑定 |
+| `core:ui` | 跨 feature 复用的轻量 UI 组件，例如加载和空状态 |
 | `feature:dashboard` | 首页 UI、首页 `UiState`、`DashboardViewModel` |
+| `feature:tasks` | 任务列表、任务表单、任务状态切换、`TasksViewModel` |
 
 ## 当前架构
 
@@ -62,6 +66,10 @@ core:model
     LearningTopic
     LearningTask
     StudyNote
+
+feature:tasks
+    TasksRoute / TasksScreen
+    TasksViewModel
 ```
 
 `DashboardViewModel` 依赖 `DevJourneyRepository` 抽象，而不是直接依赖具体数据源。这样后续把 `FakeDevJourneyRepository` 替换成 Room、网络或混合数据源时，首页和 ViewModel 的改动会更小。
@@ -128,7 +136,7 @@ DashboardScreen
 
 ### 阶段 2：新增任务模块 `feature:tasks`
 
-状态：下一阶段。
+状态：已完成。
 
 目标：完成第一个完整业务功能，让用户可以查看、创建、编辑、删除任务，并切换任务状态。
 
@@ -153,14 +161,17 @@ DashboardScreen
 
 ### 阶段 3：接入 Room 本地数据库
 
+状态：下一阶段。
+
 目标：把内存数据替换为本地持久化数据。
 
 - 新增 Room 依赖。
 - 新增数据库相关模块，建议命名为 `core:database`。
-- 创建 Entity、Dao 和 Database。
-- 实现任务、主题和笔记的本地存储。
+- 先为任务创建 Entity、Dao 和 Database。
+- 用 Room 实现任务的本地存储。
 - 在 `core:data` 中组合数据库数据源。
 - 保持上层 Repository API 尽量稳定。
+- 后续再把主题和笔记迁入 Room。
 
 建议结构：
 
@@ -286,8 +297,8 @@ core
 
 1. 整理 README 和中文文案。已完成。
 2. 完善 Dashboard 首页。已完成。
-3. 新增 `feature:tasks`。下一步。
-4. 接入 Room。
+3. 新增 `feature:tasks`。已完成。
+4. 接入 Room。下一步。
 5. 新增 `feature:notes`。
 6. 加入 Navigation Compose。
 7. 补充 Repository、ViewModel 和 Dao 测试。
@@ -298,6 +309,7 @@ core
 
 - [Phase 1: Dashboard 首页完善](docs/phase-1-dashboard.md)
 - [Phase 2: Tasks 任务模块](docs/phase-2-tasks.md)
+- [Phase 3: Room 本地数据库](docs/phase-3-room.md)
 
 ## 本地构建
 
